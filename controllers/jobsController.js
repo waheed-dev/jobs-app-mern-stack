@@ -8,7 +8,7 @@ const getAllJobs = async (req, res) => {
   return res.send("get all jobs");
 };
 const updateJob = async (req, res) => {
-  return res.send("create job");
+  return res.send("update job");
 };
 const showState = async (req, res) => {
   return res.send("show states");

@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import jobsRoutes from "./routes/jobsRoutes.js";
 dotenv.config();
 const app = express();
+import 'express-async-errors'
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("welcome haha");

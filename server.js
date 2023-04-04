@@ -17,7 +17,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
-
+console.log('waheed')
+console.log('asma')
 const start = async () => {
   try {
     await connectDb(process.env.MONGO_URI);

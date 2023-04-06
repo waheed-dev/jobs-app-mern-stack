@@ -8,17 +8,19 @@ import {
   useToast,
   Text,
 } from "@chakra-ui/react";
+import {useStore} from "zustand";
+import initialState from "../../store/store.js";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(true);
   const toast = useToast();
-
-  const handleLogin = (e) => {
+  const {isLoading,registerUser,token,user} = initialState()
+  const handleLogin =  (e) => {
     e.preventDefault();
-    if (!email | !password || (alreadyRegistered && !name)) {
+    if (!email | !password || (!alreadyRegistered && !name)) {
       return toast({
         title: "Please provide all values!",
         status: "error",
@@ -26,17 +28,13 @@ const Register = () => {
         isClosable: true,
       });
     }
-    // Your login logic goes here
-    console.log(`Email: ${email}, Password: ${password}`);
-    // Show a success message
-    toast({
-      title: "Logged in successfully!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-    setEmail("");
-    setPassword("");
+    const currentUser = {name,password,email}
+    console.log(currentUser,alreadyRegistered)
+    if (alreadyRegistered) {
+      console.log('already a member')
+    } else {
+       initialState.getState().registerUser(currentUser)
+    }
   };
 
   function alreadyRegisteredHandler(e) {
@@ -44,10 +42,9 @@ const Register = () => {
     setAlreadyRegistered(!alreadyRegistered);
   }
 
-  console.log(alreadyRegistered);
   return (
     <VStack spacing={4}>
-      {alreadyRegistered && (
+      {!alreadyRegistered && (
         <FormControl id="name">
           <FormLabel>Name</FormLabel>
           <Input
@@ -73,7 +70,7 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </FormControl>
-      {alreadyRegistered ? (
+      {!alreadyRegistered ? (
         <Text>
           Already a member?{" "}
           <a
@@ -98,12 +95,12 @@ const Register = () => {
           </a>
         </Text>
       )}
-      {alreadyRegistered ? (
-        <Button colorScheme="blue" onClick={handleLogin}>
+      {!alreadyRegistered ? (
+        <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
           Register
         </Button>
       ) : (
-        <Button colorScheme="blue" onClick={handleLogin}>
+        <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
           Login
         </Button>
       )}

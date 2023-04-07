@@ -8,17 +8,33 @@ import {
   useToast,
   Text,
 } from "@chakra-ui/react";
-import {useStore} from "zustand";
 import initialState from "../../store/store.js";
-
+import {useEffect} from "react";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [alreadyRegistered, setAlreadyRegistered] = useState(true);
   const toast = useToast();
-  const {isLoading,registerUser,token,user} = initialState()
-  const handleLogin =  (e) => {
+  const {isLoading,registerUser,token,user,showAlert} = initialState()
+  useEffect(() => {
+    if (showAlert === true) {
+      toast({
+        title : 'login successfully',
+        status : 'success',
+        isClosable : true,
+        duration : 3000
+      })
+    }  else if (showAlert === false) {
+      toast({
+        title : 'login failed',
+        status : 'error',
+        isClosable : true,
+        duration : 3000
+      })
+    }
+  },[showAlert])
+  const handleLogin = async  (e) => {
     e.preventDefault();
     if (!email | !password || (!alreadyRegistered && !name)) {
       return toast({
@@ -33,7 +49,7 @@ const Register = () => {
     if (alreadyRegistered) {
       console.log('already a member')
     } else {
-       initialState.getState().registerUser(currentUser)
+       await registerUser(currentUser)
     }
   };
 

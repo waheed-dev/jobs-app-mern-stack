@@ -53,6 +53,7 @@ const Register = () => {
         isClosable: true,
       });
     }
+    console.log(user,location,token)
     const currentUser = {name,password,email}
     console.log(currentUser,alreadyRegistered)
     if (alreadyRegistered) {

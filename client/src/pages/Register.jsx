@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import initialState from "../../store/store.js";
 import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,10 +18,11 @@ const Register = () => {
   const [alreadyRegistered, setAlreadyRegistered] = useState(true);
   const toast = useToast();
   const {isLoading,registerUser,token,user,showAlert} = initialState()
+  const navigate = useNavigate()
   useEffect(() => {
     if (showAlert === true) {
       toast({
-        title : 'login successfully',
+        title : 'login successfully! Redirecting...',
         status : 'success',
         isClosable : true,
         duration : 3000
@@ -34,6 +36,13 @@ const Register = () => {
       })
     }
   },[showAlert])
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate('/')
+      },3000)
+    }
+  },[user,navigate])
   const handleLogin = async  (e) => {
     e.preventDefault();
     if (!email | !password || (!alreadyRegistered && !name)) {

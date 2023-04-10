@@ -5,10 +5,15 @@ import dotenv from "dotenv";
 import connectDb from "./db/connect.js";
 import authRoutes from "./routes/authRoutes.js";
 import jobsRoutes from "./routes/jobsRoutes.js";
+import morgan from 'morgan'
 dotenv.config();
 const app = express();
 import 'express-async-errors'
 app.use(express.json());
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'))
+}
 app.get("/api/v1", (req, res) => {
   res.json({msg : 'server'});
 });

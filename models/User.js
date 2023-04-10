@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import {json} from "express";
+
 const Userschema = new mongoose.Schema({
   name: {
     type: String,
@@ -49,5 +49,9 @@ Userschema.pre('save',  async  function () {
 
 Userschema.methods.createJWT = function () {
  return  jwt.sign({userId : this._id}, process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME})
+}
+
+Userschema.methods.comparePasswords = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password)
 }
 export default mongoose.model("User", Userschema);

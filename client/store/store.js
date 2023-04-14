@@ -30,7 +30,9 @@ const initialState = create((set,get) => ({
         } finally {
             set({isLoading : false})
         }
+    },
+    loginUser : async (currentUser) => {
+        console.log(currentUser)
     }
-
 }))
 export default initialState

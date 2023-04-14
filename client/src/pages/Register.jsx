@@ -17,7 +17,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [alreadyRegistered, setAlreadyRegistered] = useState(true);
   const toast = useToast();
-  const {isLoading,registerUser,token,user,showAlert} = initialState()
+  const {isLoading,registerUser,token,user,showAlert,loginUser} = initialState()
   const navigate = useNavigate()
   useEffect(() => {
     if (showAlert === true) {
@@ -53,11 +53,9 @@ const Register = () => {
         isClosable: true,
       });
     }
-    console.log(user,location,token)
     const currentUser = {name,password,email}
-    console.log(currentUser,alreadyRegistered)
     if (alreadyRegistered) {
-      console.log('already a member')
+      await loginUser(currentUser)
     } else {
        await registerUser(currentUser)
     }

@@ -17,8 +17,27 @@ const register = async (req, res, next) => {
         next(e);
     }
 };
-const login = async (req, res) => {
-    res.send("login");
+const login = async (req, res,next) => {
+    try {
+    const {email,password} = req.body;
+        if (!email || !password) {
+            throw new Error('please email and password')
+        }
+        const user = await User.findOne({email }).select('+password')
+        if (!user) {
+            throw new Error('invalid credential')
+        }
+        const isPasswordCorrect = await user.comparePasswords(password)
+        if (!isPasswordCorrect) {
+            throw new Error('invalid credential')
+        }
+        const token = user.createJWT()
+        user.password = undefined
+        res.status(StatusCodes.OK).json({user,token,location : user.location})
+        res.send('login')
+    } catch (e) {
+        next(e)
+    }
 };
 const updateUser = async (req, res) => {
     res.send("updateUser");

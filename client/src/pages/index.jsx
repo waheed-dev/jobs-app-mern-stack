@@ -1,8 +1,7 @@
 import Landing from "./Landing.jsx";
 import Register from "./Register.jsx";
 import Error from "./Error.jsx";
-import Dashboard from "./Dashboard.jsx";
-
+import ProtectedRoute from "./ProtectedRoute.jsx";
 export {
-    Landing,Error,Dashboard,Register
+    Landing,Error,Register,ProtectedRoute
 }

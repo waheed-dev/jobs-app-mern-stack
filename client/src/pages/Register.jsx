@@ -38,7 +38,7 @@ const Register = () => {
         duration : 3000
       })
     }
-  },[showAlert,user,navigate()])
+  },[showAlert,user,navigate])
   useEffect(() => {
 
   },[user,navigate])

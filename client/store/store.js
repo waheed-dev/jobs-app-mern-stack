@@ -11,6 +11,7 @@ const userLocation = localStorage.getItem('location')
 const initialState = create((set,get) => ({
     isLoading: false,
       showAlert : null,
+    alertText : '',
     user : user ? JSON.parse(user) : null,
     token : token || null,
     userLocation : userLocation || '',
@@ -22,17 +23,30 @@ const initialState = create((set,get) => ({
             console.log(response)
             const {user,token,location} = response.data
             set({token : token,user : user,userLocation : location,jobLocation : location})
-            set({showAlert : true})
+
+            set({showAlert : true,alertText : 'user created! redirecting ....'})
             addUserToLocalStorage({user,token,location})
         } catch (error) {
             console.log('sad',error)
-            set({showAlert : false})
+            set({showAlert : false,alertText : 'something went wrong'})
         } finally {
             set({isLoading : false})
         }
     },
     loginUser : async (currentUser) => {
-        console.log(currentUser)
+        try {
+
+            const response = await axios.post('/api/v1/auth/login',currentUser)
+            const {user,token,location} = response.data
+            set({token : token,user : user,userLocation : location,jobLocation : location})
+            set({showAlert : true,alertText : 'logged in successfully! redirecting ....'})
+            addUserToLocalStorage({user,token,location})
+        } catch (error) {
+            console.log('sad',error)
+            set({showAlert : false,alertText : 'credentials dont match'})
+        } finally {
+            set({isLoading : false})
+        }
     }
 }))
 export default initialState

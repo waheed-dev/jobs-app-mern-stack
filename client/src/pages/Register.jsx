@@ -17,31 +17,30 @@ const Register = () => {
   const [name, setName] = useState("");
   const [alreadyRegistered, setAlreadyRegistered] = useState(true);
   const toast = useToast();
-  const {isLoading,registerUser,token,user,showAlert,loginUser} = initialState()
+  const {isLoading,registerUser,token,user,showAlert,loginUser,alertText} = initialState()
   const navigate = useNavigate()
   useEffect(() => {
-    if (showAlert === true) {
+    if (showAlert === true && user) {
       toast({
-        title : 'login successfully! Redirecting...',
+        title : `${alertText}`,
         status : 'success',
         isClosable : true,
         duration : 3000
       })
-    }  else if (showAlert === false) {
+        setTimeout(() => {
+          navigate('/')
+        },3000)
+    }  else if (showAlert === false && !user) {
       toast({
-        title : 'login failed',
+        title : `${alertText}`,
         status : 'error',
         isClosable : true,
         duration : 3000
       })
     }
-  },[showAlert])
+  },[showAlert,user,navigate()])
   useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        navigate('/')
-      },3000)
-    }
+
   },[user,navigate])
   const handleLogin = async  (e) => {
     e.preventDefault();

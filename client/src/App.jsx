@@ -1,13 +1,11 @@
 import { Box, Container } from "@chakra-ui/react";
-import Navbar from "./components/Navbar.jsx";
-import Hero from "./components/Hero.jsx";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import {Error,Landing,Register,ProtectedRoute} from './pages'
 import {AllJobs,Stats,AddJob,Profile,SharedLayout} from './pages/dashboard'
 function App() {
   return (
     <Box>
-      <Box mt={"4rem"} px={"2rem"}>
+      <Box mt={"rem"} px={"2rem"}>
         <Routes>
           <Route path={"/"} element={
             <ProtectedRoute>

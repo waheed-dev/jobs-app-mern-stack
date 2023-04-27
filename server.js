@@ -9,6 +9,7 @@ import morgan from 'morgan'
 dotenv.config();
 const app = express();
 import 'express-async-errors'
+import authenticateUser from "./middlewares/auth.js";
 app.use(express.json());
 
 if (process.env.NODE_ENV !== 'production') {
@@ -17,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.get("/api/v1", (req, res) => {
   res.json({msg : 'server'});
 });
-app.use("/api/v1/jobs", jobsRoutes);
+app.use("/api/v1/jobs",authenticateUser, jobsRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

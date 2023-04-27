@@ -40,7 +40,16 @@ const login = async (req, res,next) => {
     }
 };
 const updateUser = async (req, res) => {
-    res.send("updateUser");
+    console.log(req.body)
+    const {name,lastName,email,location} = req.body
+    const user = await User.findOne({_id : req.user.userId})
+    user.name = name
+    user.lastName = lastName
+    user.email = email
+    user.location = location
+    await user.save()
+    const token = user.createJWT()
+    res.status(StatusCodes.OK).json({user,token,location : user.location})
 };
 
 export {register, login, updateUser};

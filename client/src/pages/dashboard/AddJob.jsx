@@ -33,7 +33,7 @@ const AddJob = () => {
         position,
         statusOptions,
         jobType,
-        location,
+        jobLocation,
         jobStatus,
         createJob,
         isEditing
@@ -41,13 +41,13 @@ const AddJob = () => {
     const storeState = initialState(state => state.set)
     const [jobPosition, setJobPosition] = useState(position)
     const [jobCompany, setJobCompany] = useState(company)
-    const [jobLocation, setJobLocation] = useState('')
+    const [jobsLocation, setJobsLocation] = useState(jobLocation)
     const [jobsStatus, setJobsStatus] = useState(jobStatus)
     const [jobOptions, setJobOptions] = useState(jobType)
     console.log(company, position, jobType, jobStatus)
     const handleSubmit = (event) => {
         event.preventDefault()
-        if (!jobCompany || !jobPosition || !jobLocation) {
+        if (!jobCompany || !jobPosition || !jobsLocation) {
             return toast({
                 title: 'provide all values',
                 duration: 3000,
@@ -59,11 +59,11 @@ const AddJob = () => {
                 position: jobPosition,
                 jobType: jobOptions,
                 jobStatus: jobsStatus,
-                location: jobLocation
+                jobLocation: jobsLocation
             })
 
             console.log(location)
-            console.log({company, position, jobsStatus, jobOptions, location})
+            console.log({company, position, jobsStatus, jobOptions, jobLocation})
             createJob()
             handleReset()
             return toast({
@@ -77,7 +77,7 @@ const AddJob = () => {
     function handleReset() {
         setJobPosition('')
         setJobCompany('')
-        setJobLocation('')
+        setJobsLocation('')
         setJobsStatus('pending')
         setJobOptions('full-time')
         storeState({company: '', position: '', jobType: 'full-time', jobStatus: 'pending', location: ''})
@@ -127,8 +127,8 @@ const AddJob = () => {
                                 <Stack>
                                     <FormControl id="location">
                                         <FormLabel>Job Location</FormLabel>
-                                        <Input value={jobLocation} type={'text'} name={'location'}
-                                               onChange={(e) => setJobLocation(e.target.value)}/>
+                                        <Input value={jobsLocation} type={'text'} name={'location'}
+                                               onChange={(e) => setJobsLocation(e.target.value)}/>
                                     </FormControl>
                                     <FormControl id={'type'}>
                                         <FormLabel>Job Type</FormLabel>

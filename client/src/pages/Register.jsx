@@ -20,7 +20,7 @@ const Register = () => {
   const {isLoading,registerUser,token,user,showAlert,loginUser,alertText} = initialState()
   const navigate = useNavigate()
   useEffect(() => {
-    if (showAlert === true && user) {
+    if (showAlert === true || user) {
       toast({
         title : `${alertText}`,
         status : 'success',

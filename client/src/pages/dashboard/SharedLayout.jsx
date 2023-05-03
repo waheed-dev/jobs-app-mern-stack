@@ -5,11 +5,11 @@ const SharedLayout = () => {
     return (
         <Grid
             h='200px'
-            templateRows='repeat(2, 1fr)'
+            templateRows='repeat(1, 1fr)'
             templateColumns='repeat(5, 1fr)'
-            gap={4}
+            gap={''}
         >
-            <GridItem rowSpan={20} colSpan={1}>
+            <GridItem>
                 <ProtectedSidebar/>
             </GridItem>
             <GridItem colSpan={4}>

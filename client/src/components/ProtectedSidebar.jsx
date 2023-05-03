@@ -24,7 +24,7 @@ const Sidebar = () => {
     return (
         <>
 
-            <Box maxW="2xl" mx="auto" px={6}>
+            <Box maxW="2xl" mx="auto" px={{ base: '', sm: '8' }}>
                 <Box mt={'4'} display="flex" alignItems="center" borderRight={'1px'} borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700' }>
                     {isMobile ? (
                         <Button
@@ -77,7 +77,6 @@ const Sidebar = () => {
                     </Flex>}
                 </Box>
             </Box>
-
             <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>

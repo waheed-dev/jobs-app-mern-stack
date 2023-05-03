@@ -47,6 +47,19 @@ const initialState = create((set, get) => ({
     jobType: 'full-time',
     statusOptions: ['pending', 'interview', 'declined'],
     jobStatus: 'pending',
+    jobs:[],
+    totalJobs : 0,
+    noOfPages : 1,
+    page : 1,
+    getAllJobs : async () => {
+        try {
+      const response = await authFetch.get('/jobs')
+            console.log(response.data.jobs)
+            set({jobs: response.data.jobs, totalJobs: response.data.totalJobs, page: response.data.numOfPages})
+        } catch (e) {
+            console.log(e)
+        }
+    },
     createJob: async () => {
         const data = {
             company: get().company,

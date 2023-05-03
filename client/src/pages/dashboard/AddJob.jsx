@@ -20,14 +20,6 @@ import {useState} from "react";
 const AddJob = () => {
     const toast = useToast()
     const {
-        isLoading,
-        registerUser,
-        token,
-        user,
-        showAlert,
-        loginUser,
-        alertText,
-        updateUser,
         jobTypeOptions,
         company,
         position,
@@ -84,7 +76,7 @@ const AddJob = () => {
     }
 
     return (
-        <Container py={{base: '8', md: '14'}}>
+        <Box py={{base: '8', md: '14'}}>
             <Stack spacing="5" divider={<StackDivider/>}>
                 <Stack
                     direction={{base: 'column', lg: 'column'}}
@@ -150,7 +142,7 @@ const AddJob = () => {
                     </Box>
                 </Stack>
             </Stack>
-        </Container>
+        </Box>
     )
 }
 export default AddJob

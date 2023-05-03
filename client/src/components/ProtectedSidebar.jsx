@@ -16,8 +16,10 @@ import {NavButton} from "./NavButton.jsx";
 import {FiBarChart2, FiBookmark, FiCheckSquare, FiHome, FiUsers} from "react-icons/fi";
 import {UserProfile} from "./UserProfile.jsx";
 import { Link } from "react-router-dom";
+import initialState from "../../store/store.js";
 
 const Sidebar = () => {
+    const {user} = initialState()
     const { isOpen, onOpen, onClose } = useDisclosure();
     const isMobile = useBreakpointValue({ base: true, lg: false });
     const { colorMode, toggleColorMode } = useColorMode();
@@ -67,9 +69,8 @@ const Sidebar = () => {
                                     </Stack>
                                     <Divider />
                                     <UserProfile
-                                        name="Christoph Winston"
-                                        image="https://tinyurl.com/yhkm2ek8"
-                                        email="chris@chakra-ui.com"
+                                        name={user.name}
+                                        email={user.email}
                                     />
                                 </Stack>
                             </Stack>
@@ -106,9 +107,8 @@ const Sidebar = () => {
                                         </Stack>
                                         <Divider />
                                         <UserProfile
-                                            name="Christoph Winston"
-                                            image="https://tinyurl.com/yhkm2ek8"
-                                            email="chris@chakra-ui.com"
+                                            name={user.name}
+                                            email={user.email}
                                         />
                                     </Stack>
                                 </Stack>

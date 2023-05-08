@@ -18,6 +18,7 @@ import {
 import initialState from "../../../store/store.js";
 import {useEffect} from "react";
 import moment from 'moment'
+import {Link} from "react-router-dom";
 
 const AllJobs = () => {
     const toast = useToast()
@@ -30,7 +31,10 @@ const AllJobs = () => {
         totalJobs,
         noOfPages,
         page,
-        getAllJobs
+        getAllJobs,
+        editHandler,
+        deleteHandler,
+
     } = initialState()
     useEffect(() => {
         getAllJobs()
@@ -46,6 +50,12 @@ const AllJobs = () => {
     const date = createdAt => {
         return moment(createdAt).format('MMM Do,YYYY')
     }
+    const statusColors = {
+        pending : 'green.400',
+        interview : 'blue.400',
+        declined : 'red.400'
+    }
+    
     return (
         <Box py={{base: '4', md: '8'}}>
             <Stack spacing="5" divider={<StackDivider/>}>
@@ -128,11 +138,21 @@ const AllJobs = () => {
                                 <Badge variant="solid" colorScheme="purple" mr="2">
                                     {job.jobType}
                                 </Badge>
-                                <Badge variant="solid" colorScheme="blue" mr="2">
+                                <Badge variant="solid" bg={statusColors[job.status]} mr="2">
                                     {job.status}
                                 </Badge>
                             </Flex>
                         </Box>
+                        <Stack>
+                            <Link to={'/add-job'}>
+                                <Button variant="solid" colorScheme="purple" mr="2" onClick={() => editHandler(job._id)}>
+                                    Edit
+                                </Button>
+                            </Link>
+                            <Button variant="solid" colorScheme="blue" mr="2" onClick={() => deleteHandler(job._id)}>
+                                Delete
+                            </Button>
+                        </Stack>
                     </Flex>
                 </Box>)}
             </Grid>

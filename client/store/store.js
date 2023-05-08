@@ -117,7 +117,24 @@ const initialState = create((set, get) => ({
         } finally {
             set({isLoading: false})
         }
-    }
+    },
+     editHandler : (id) => {
+         const job = get().jobs.find(job => job._id === id)
+         const {_id,position,company,jobLocation,jobType,status} = job
+         set({editJobId: _id, isEditing : true,position,company,jobLocation,jobType,status})
+    },
+    editJob :  () => {
+        console.log('edit job')
+    },
+    deleteHandler :async (_id) => {
+        try {
+            await authFetch.delete(`/jobs/${_id}`)
+            await get().getAllJobs()
 
+        } catch (err) {
+            console.log(err)
+        }
+        console.log('Job Editing')
+    }
 }))
 export default initialState

@@ -28,7 +28,10 @@ const AddJob = () => {
         jobLocation,
         jobStatus,
         createJob,
-        isEditing
+        isEditing,
+        editJob,
+        editJobId,
+        getAllJobs
     } = initialState()
     const storeState = initialState(state => state.set)
     const [jobPosition, setJobPosition] = useState(position)
@@ -37,7 +40,7 @@ const AddJob = () => {
     const [jobsStatus, setJobsStatus] = useState(jobStatus)
     const [jobOptions, setJobOptions] = useState(jobType)
     console.log(company, position, jobType, jobStatus)
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         if (!jobCompany || !jobPosition || !jobsLocation) {
             return toast({
@@ -45,7 +48,8 @@ const AddJob = () => {
                 duration: 3000,
                 status: 'error'
             })
-        } else  {
+        }
+
             storeState({
                 company: jobCompany,
                 position: jobPosition,
@@ -53,26 +57,27 @@ const AddJob = () => {
                 jobStatus: jobsStatus,
                 jobLocation: jobsLocation
             })
-
             console.log(location)
             console.log({company, position, jobsStatus, jobOptions, jobLocation})
-            createJob()
+                if (isEditing) {
+                    await editJob()
+                }
+               await createJob()
             handleReset()
             return toast({
                 title: 'user updated',
                 duration: 3000,
                 status: 'success'
             })
-        }
-    }
 
+    }
     function handleReset() {
         setJobPosition('')
         setJobCompany('')
         setJobsLocation('')
         setJobsStatus('pending')
         setJobOptions('full-time')
-        storeState({company: '', position: '', jobType: 'full-time', jobStatus: 'pending', location: ''})
+        storeState({company: '', position: '', jobType: 'full-time', jobStatus: 'pending', location: '',isEditing: false,editJobId : ""})
     }
 
     return (
@@ -89,11 +94,9 @@ const AddJob = () => {
                         </Text>
                     </Box>
                     <Box
-                        as="form"
                         bg="bg-surface"
                         boxShadow={useColorModeValue('sm', 'sm-dark')}
                         borderRadius="lg"
-                        maxW={{lg: '3xl'}}
                     >
                         <form onSubmit={handleSubmit}>
                             <Stack spacing="5" px={{base: '4', md: '4'}} py={{base: '5', md: '6'}}>

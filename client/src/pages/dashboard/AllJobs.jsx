@@ -16,13 +16,13 @@ import {
     useToast
 } from "@chakra-ui/react";
 import initialState from "../../../store/store.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import moment from 'moment'
 import {Link} from "react-router-dom";
 
 const AllJobs = () => {
     const toast = useToast()
-    const {
+    let {
         jobTypeOptions,
         company,
         position,
@@ -34,11 +34,18 @@ const AllJobs = () => {
         getAllJobs,
         editHandler,
         deleteHandler,
-
+        search,
+        searchStatus,
+        sort,
+        sortOptions,
+            searchType,
+        clearFilter,
+        searchJobStatusOptions,
+        searchJobTypeOptions
     } = initialState()
-    useEffect(() => {
-        getAllJobs()
-    },[page,getAllJobs,noOfPages,totalJobs])
+    useEffect( () => {
+        getAllJobs(search,searchType,sort,searchStatus)
+    },[page,getAllJobs,noOfPages,totalJobs,search,searchType,sort,searchStatus])
     const handleSubmit = (event) => {
         event.preventDefault()
             return toast({
@@ -55,7 +62,37 @@ const AllJobs = () => {
         interview : 'blue.400',
         declined : 'red.400'
     }
-    
+
+    const storeState = initialState(state => state.set)
+
+    function handlePositionChange(e) {
+        storeState({
+            search : e.target.value
+        })
+        console.log(search)
+    }
+
+    function handleStatusChange(e) {
+        storeState({
+        searchStatus: e.target.value
+        })
+        console.log(searchStatus)
+    }
+
+    function handleSortChange(e) {
+        storeState({
+            sort : e.target.value
+        })
+        console.log(sort)
+    }
+
+    function handleSearchTypeChange(e) {
+        storeState({
+            searchType : e.target.value
+        })
+        console.log(sort)
+    }
+
     return (
         <Box py={{base: '4', md: '8'}}>
             <Stack spacing="5" divider={<StackDivider/>}>
@@ -79,12 +116,12 @@ const AllJobs = () => {
                                 <Stack spacing="2" direction={{base: 'column', md: 'row'}}>
                                     <FormControl id="position">
                                         <FormLabel>Position</FormLabel>
-                                        <Input name={'position'} type={'text'}/>
+                                        <Input name={'position'} type={'text'} value={search} onChange={handlePositionChange}/>
                                     </FormControl>
-                                    <FormControl id={'status'}>
-                                        <FormLabel>Status</FormLabel>
-                                        <Select>
-                                            {statusOptions.map((value, index) => <option key={index}
+                                    <FormControl id={'sort'}>
+                                        <FormLabel>Sort</FormLabel>
+                                        <Select value={sort} onChange={handleSortChange}>
+                                            {sortOptions.map((value, index) => <option key={index}
                                                                                          value={value}>{value}</option>)}
                                         </Select>
                                     </FormControl>
@@ -92,21 +129,21 @@ const AllJobs = () => {
                                 <Stack spacing="2" direction={{base: 'column', md: 'row'}}>
                                     <FormControl id={'status'}>
                                         <FormLabel>Status</FormLabel>
-                                        <Select>
-                                            {statusOptions.map((value, index) => <option key={index}
+                                        <Select value={searchStatus} onChange={handleStatusChange}>
+                                            {searchJobStatusOptions.map((value, index) => <option key={index}
                                                                                          value={value}>{value}</option>)}
                                         </Select>
                                     </FormControl>
                                     <FormControl id={'type'}>
                                         <FormLabel>Job Type</FormLabel>
-                                        <Select>
-                                            {jobTypeOptions.map((value, index) => <option key={index}
+                                        <Select value={searchType} onChange={handleSearchTypeChange}>
+                                            {searchJobTypeOptions.map((value, index) => <option key={index}
                                                                                           value={value}>{value}</option>)}
                                         </Select>
                                     </FormControl>
                                 </Stack>
                                 <Flex direction="row-reverse" py="2" px={{base: '4', md: '6'}}>
-                                    <Button type={'submit'} onClick={handleSubmit} bg="green.500">Search
+                                    <Button onClick={clearFilter} bg="red.400">Clear filter
                                     </Button>
                                 </Flex>
                             </Stack>

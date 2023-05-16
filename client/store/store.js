@@ -53,9 +53,20 @@ const initialState = create((set, get) => ({
     page : 1,
     stats : {},
     monthlyApplication : [],
-    getAllJobs : async () => {
+    search : '',
+    searchStatus : 'all',
+    searchType : 'all',
+    sort : 'latest',
+    sortOptions : ['latest','oldest','a-z','z-a'],
+    searchJobTypeOptions: ['all','full-time', 'part-time', 'remote', 'internship'],
+    searchJobStatusOptions: ['all','pending', 'interview', 'declined'],
+    getAllJobs : async (search,searchType,sort,searchStatus) => {
+        let url =  `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+        if (search) {
+            url = url + `&search=${search}`
+        }
         try {
-      const response = await authFetch.get('/jobs')
+      const response = await authFetch.get(url)
             console.log(response.data.jobs)
             set({jobs: response.data.jobs, totalJobs: response.data.totalJobs, page: response.data.numOfPages})
         } catch (e) {
@@ -160,6 +171,14 @@ const initialState = create((set, get) => ({
         } catch (err) {
             console.log(err)
         }
+    },
+    clearFilter : () => {
+        set({search: '', searchStatus : 'all',searchType : "all",sort : 'latest'})
+        console.log('cleared filter')
+        console.log(get().search)
+        console.log(get().searchStatus)
+        console.log(get().searchType)
+        console.log(get().sort)
     }
 }))
 export default initialState

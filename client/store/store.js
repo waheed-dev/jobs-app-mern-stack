@@ -51,6 +51,8 @@ const initialState = create((set, get) => ({
     totalJobs : 0,
     noOfPages : 1,
     page : 1,
+    stats : {},
+    monthlyApplication : [],
     getAllJobs : async () => {
         try {
       const response = await authFetch.get('/jobs')
@@ -123,18 +125,41 @@ const initialState = create((set, get) => ({
          const {_id,position,company,jobLocation,jobType,status} = job
          set({editJobId: _id, isEditing : true,position,company,jobLocation,jobType,status})
     },
-    editJob :  () => {
-        console.log('edit job')
+    editJob : async (editJobId) => {
+        const data = {
+            company: get().company,
+            position: get().position,
+            status: get().jobStatus,
+            jobType: get().jobType,
+            jobLocation: get().jobLocation,
+        }
+        try {
+              await authFetch.patch(`jobs/${editJobId}`, data)
+            console.log('success')
+        } catch (e) {
+            console.log(e)
+        }
     },
     deleteHandler :async (_id) => {
         try {
             await authFetch.delete(`/jobs/${_id}`)
-            await get().getAllJobs()
+           return  await get().getAllJobs()
 
         } catch (err) {
             console.log(err)
         }
         console.log('Job Editing')
+    },
+    statsJob : async () => {
+        try {
+           const data = await authFetch.get('jobs/stats')
+
+            const {defaultStates,monthlyApplications} = data.data
+            console.log(monthlyApplications)
+            set({stats : defaultStates,monthlyApplication : monthlyApplications})
+        } catch (err) {
+            console.log(err)
+        }
     }
 }))
 export default initialState

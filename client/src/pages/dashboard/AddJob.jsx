@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Container,
     Divider,
     Flex,
     FormControl,
@@ -50,34 +49,52 @@ const AddJob = () => {
             })
         }
 
-            storeState({
-                company: jobCompany,
-                position: jobPosition,
-                jobType: jobOptions,
-                jobStatus: jobsStatus,
-                jobLocation: jobsLocation
+        storeState({
+            company: jobCompany,
+            position: jobPosition,
+            jobType: jobOptions,
+            jobStatus: jobsStatus,
+            jobLocation: jobsLocation
+        })
+        console.log(location)
+        console.log({company, position, jobsStatus, jobOptions, jobLocation})
+        if  (isEditing) {
+            await editJob(editJobId)
+            await getAllJobs
+            handleReset()
+              toast({
+                title: 'job updated',
+                duration: 3000,
+                status: 'success'
             })
-            console.log(location)
-            console.log({company, position, jobsStatus, jobOptions, jobLocation})
-                if (isEditing) {
-                    await editJob()
-                }
-               await createJob()
+        } else {
+            await createJob()
             handleReset()
             return toast({
                 title: 'user updated',
                 duration: 3000,
                 status: 'success'
             })
+        }
+
 
     }
+
     function handleReset() {
         setJobPosition('')
         setJobCompany('')
         setJobsLocation('')
         setJobsStatus('pending')
         setJobOptions('full-time')
-        storeState({company: '', position: '', jobType: 'full-time', jobStatus: 'pending', location: '',isEditing: false,editJobId : ""})
+        storeState({
+            company: '',
+            position: '',
+            jobType: 'full-time',
+            jobStatus: 'pending',
+            location: '',
+            isEditing: false,
+            editJobId: ""
+        })
     }
 
     return (

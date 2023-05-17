@@ -19,6 +19,7 @@ const Register = () => {
   const toast = useToast();
   const {isLoading,registerUser,token,user,showAlert,loginUser,alertText} = initialState()
   const navigate = useNavigate()
+
   useEffect(() => {
     if (showAlert === true || user) {
       toast({

@@ -12,13 +12,13 @@ import 'express-async-errors'
 import authenticateUser from "./middlewares/auth.js";
 app.use(express.json());
 
+app.use("/api/v1/jobs",jobsRoutes);
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 app.get("/api/v1", (req, res) => {
   res.json({msg : 'server'});
 });
-app.use("/api/v1/jobs",authenticateUser, jobsRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

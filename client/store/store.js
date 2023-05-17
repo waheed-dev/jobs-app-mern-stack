@@ -13,23 +13,6 @@ const userLocation = localStorage.getItem('location')
 const authFetch = axios.create({
     baseURL: 'api/v1',
 })
-authFetch.interceptors.request.use((config) => {
-    config.headers['Authorization'] = `Bearer ${token}`
-    return config
-}, (error) => {
-    return Promise.reject(error)
-})
-
-authFetch.interceptors.response.use((response) => {
-    return response
-}, (error) => {
-    console.log(error.response)
-    if (error.response.status === 401) {
-        console.log('auth error')
-    }
-    return Promise.reject(error)
-})
-
 const initialState = create((set, get) => ({
     isLoading: false,
     showAlert: null,
@@ -60,14 +43,13 @@ const initialState = create((set, get) => ({
     sortOptions : ['latest','oldest','a-z','z-a'],
     searchJobTypeOptions: ['all','full-time', 'part-time', 'remote', 'internship'],
     searchJobStatusOptions: ['all','pending', 'interview', 'declined'],
-    getAllJobs : async (search,searchType,sort,searchStatus) => {
-        let url =  `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+    getAllJobs : async (search,searchType,sort,searchStatus,noOfPages) => {
+        let url =  `/jobs?page=${noOfPages}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`
         if (search) {
             url = url + `&search=${search}`
         }
         try {
       const response = await authFetch.get(url)
-            console.log(response.data.jobs)
             set({jobs: response.data.jobs, totalJobs: response.data.totalJobs, page: response.data.numOfPages})
         } catch (e) {
             console.log(e)
@@ -83,7 +65,6 @@ const initialState = create((set, get) => ({
         }
         try {
             await authFetch.post('/jobs', data)
-            console.log('success')
         } catch (e) {
             console.log(e)
         }
@@ -92,26 +73,22 @@ const initialState = create((set, get) => ({
         try {
             const {data} = await authFetch.patch('/auth/updateUser', currentUser)
             const {user, token, location} = data
-            console.log(user, token, location)
             set({token: token, user: user, userLocation: location, jobLocation: location})
             set({showAlert: true, alertText: 'user created! redirecting ....'})
             addUserToLocalStorage({user, token, location})
         } catch (error) {
             set({showAlert: false, alertText: 'something went wrong'})
-            console.log(error.response)
         }
     },
     registerUser: async (user1) => {
         try {
             console.log('sss')
             const response = await axios.post('/api/v1/auth/register', user1)
-            console.log(response)
             const {user, token, location} = response.data
             set({token: token, user: user, userLocation: location, jobLocation: location})
             set({showAlert: true, alertText: 'profile updated'})
             addUserToLocalStorage({user, token, location})
         } catch (error) {
-            console.log('sad', error)
             set({showAlert: false, alertText: 'something went wrong'})
         } finally {
             set({isLoading: false})
@@ -121,11 +98,11 @@ const initialState = create((set, get) => ({
         try {
             const response = await axios.post('/api/v1/auth/login', currentUser)
             const {user, token, location} = response.data
+            console.log(token)
             set({token: token, user: user, userLocation: location, jobLocation: location})
             set({showAlert: true, alertText: 'logged in successfully! redirecting ....'})
             addUserToLocalStorage({user, token, location})
         } catch (error) {
-            console.log('sad', error)
             set({showAlert: false, alertText: 'credentials dont match'})
         } finally {
             set({isLoading: false})
@@ -146,7 +123,6 @@ const initialState = create((set, get) => ({
         }
         try {
               await authFetch.patch(`jobs/${editJobId}`, data)
-            console.log('success')
         } catch (e) {
             console.log(e)
         }
@@ -159,14 +135,11 @@ const initialState = create((set, get) => ({
         } catch (err) {
             console.log(err)
         }
-        console.log('Job Editing')
     },
     statsJob : async () => {
         try {
            const data = await authFetch.get('jobs/stats')
-
             const {defaultStates,monthlyApplications} = data.data
-            console.log(monthlyApplications)
             set({stats : defaultStates,monthlyApplication : monthlyApplications})
         } catch (err) {
             console.log(err)
@@ -174,11 +147,28 @@ const initialState = create((set, get) => ({
     },
     clearFilter : () => {
         set({search: '', searchStatus : 'all',searchType : "all",sort : 'latest'})
-        console.log('cleared filter')
-        console.log(get().search)
-        console.log(get().searchStatus)
-        console.log(get().searchType)
-        console.log(get().sort)
-    }
+
+    },
+    changePage : (page) => {
+        set({noOfPages : page})
+    },
 }))
+authFetch.interceptors.request.use((config) => {
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem("token")}`
+    return config
+}, (error) => {
+    return Promise.reject(error)
+})
+
+authFetch.interceptors.response.use((response) => {
+    return response
+}, (error) => {
+    console.log(error.response)
+    if (error.response.status === 401) {
+        console.log('auth error')
+    }
+    return Promise.reject(error)
+})
+
+
 export default initialState

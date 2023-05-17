@@ -3,16 +3,13 @@ import initialState from "../../../store/store.js";
 import {Box, Grid, Heading, Text, useColorModeValue} from "@chakra-ui/react";
 import {BsCalendar, BsClock} from "react-icons/bs";
 import {GiCrossMark} from "react-icons/gi";
-import {ResponsiveBar} from "@nivo/bar";
-import {ResponsivePie} from "@nivo/pie";
 import Charts from "./charts/index.jsx";
 
 const Stats = () => {
   const {statsJob,stats,monthlyApplication} = initialState()
   useEffect(() => {
     statsJob()
-  },[])
-  console.log(monthlyApplication)
+  },[monthlyApplication])
 
   return (
       <Box mt={'10'} textAlign={'center'}>

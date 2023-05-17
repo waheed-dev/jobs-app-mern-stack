@@ -25,7 +25,6 @@ const Sidebar = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     return (
         <>
-
             <Box maxW="2xl" mx="auto" px={{ base: '', sm: '8' }}>
                 <Box mt={'4'} display="flex" alignItems="center" borderRight={'1px'} borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700' }>
                     {isMobile ? (

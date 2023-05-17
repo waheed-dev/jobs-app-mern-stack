@@ -32,9 +32,9 @@ const login = async (req, res,next) => {
             throw new Error('invalid credential')
         }
         const token = user.createJWT()
+        console.log(token)
         user.password = undefined
         res.status(StatusCodes.OK).json({user,token,location : user.location})
-        res.send('login')
     } catch (e) {
         next(e)
     }

@@ -19,6 +19,7 @@ import initialState from "../../../store/store.js";
 import {useEffect, useState} from "react";
 import moment from 'moment'
 import {Link} from "react-router-dom";
+import Pagination from "./Pagination.jsx";
 
 const AllJobs = () => {
     const toast = useToast()
@@ -44,8 +45,9 @@ const AllJobs = () => {
         searchJobTypeOptions
     } = initialState()
     useEffect( () => {
-        getAllJobs(search,searchType,sort,searchStatus)
+        getAllJobs(search,searchType,sort,searchStatus,noOfPages)
     },[page,getAllJobs,noOfPages,totalJobs,search,searchType,sort,searchStatus])
+    console.log(totalJobs,noOfPages)
     const handleSubmit = (event) => {
         event.preventDefault()
             return toast({
@@ -67,21 +69,24 @@ const AllJobs = () => {
 
     function handlePositionChange(e) {
         storeState({
-            search : e.target.value
+            search : e.target.value,
+            noOfPages : 1
         })
         console.log(search)
     }
 
     function handleStatusChange(e) {
         storeState({
-        searchStatus: e.target.value
+        searchStatus: e.target.value,
+            noOfPages : 1
         })
         console.log(searchStatus)
     }
 
     function handleSortChange(e) {
         storeState({
-            sort : e.target.value
+            sort : e.target.value,
+            noOfPages : 1
         })
         console.log(sort)
     }
@@ -89,6 +94,8 @@ const AllJobs = () => {
     function handleSearchTypeChange(e) {
         storeState({
             searchType : e.target.value
+            ,
+            noOfPages : 1
         })
         console.log(sort)
     }
@@ -191,7 +198,9 @@ const AllJobs = () => {
                             </Button>
                         </Stack>
                     </Flex>
+
                 </Box>)}
+                <Pagination/>
             </Grid>
         </Box>)
 }

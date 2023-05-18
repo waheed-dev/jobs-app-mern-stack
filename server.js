@@ -10,16 +10,27 @@ dotenv.config();
 const app = express();
 import 'express-async-errors'
 import authenticateUser from "./middlewares/auth.js";
+import  {dirname} from 'path'
+import {fileURLToPath} from 'url'
+import path from 'path'
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
 app.use(express.json());
-
-app.use("/api/v1/jobs",jobsRoutes);
+app.use(helmet())
+app.use(xss())
+app.use(mongoSanitize())
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
-app.get("/api/v1", (req, res) => {
-  res.json({msg : 'server'});
-});
+const __dirname = dirname(fileURLToPath(import.meta.url))
+app.use(express.static(path.resolve(__dirname,'./client/dist')))
+
+app.use("/api/v1/jobs",jobsRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname,'./client/dist', 'index.html'))
+});
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;

@@ -16,12 +16,13 @@ import {
     useToast
 } from "@chakra-ui/react";
 import initialState from "../../../store/store.js";
-import {useEffect, useState} from "react";
+import {useEffect, useState,useMemo} from "react";
 import moment from 'moment'
 import {Link} from "react-router-dom";
 import Pagination from "./Pagination.jsx";
 
 const AllJobs = () => {
+    const [localSearch,setLocalSearch] = useState('')
     const toast = useToast()
     let {
         jobTypeOptions,
@@ -47,7 +48,6 @@ const AllJobs = () => {
     useEffect( () => {
         getAllJobs(search,searchType,sort,searchStatus,noOfPages)
     },[page,getAllJobs,noOfPages,totalJobs,search,searchType,sort,searchStatus])
-    console.log(totalJobs,noOfPages)
     const handleSubmit = (event) => {
         event.preventDefault()
             return toast({
@@ -66,15 +66,6 @@ const AllJobs = () => {
     }
 
     const storeState = initialState(state => state.set)
-
-    function handlePositionChange(e) {
-        storeState({
-            search : e.target.value,
-            noOfPages : 1
-        })
-        console.log(search)
-    }
-
     function handleStatusChange(e) {
         storeState({
         searchStatus: e.target.value,
@@ -92,13 +83,29 @@ const AllJobs = () => {
     }
 
     function handleSearchTypeChange(e) {
+
         storeState({
-            searchType : e.target.value
-            ,
+            searchType : e.target.value,
             noOfPages : 1
         })
         console.log(sort)
     }
+
+    const debounce = () => {
+        let timeoutID
+        return (e) => {
+            setLocalSearch(e.target.value)
+            clearTimeout(timeoutID)
+            timeoutID = setTimeout(() => {
+                setLocalSearch(e.target.value)
+                storeState({
+                    search : e.target.value,
+                    noOfPages : 1
+                })
+            },800)
+        }
+    }
+    const optimizedDebounce = useMemo(() => debounce(),[])
 
     return (
         <Box py={{base: '4', md: '8'}}>
@@ -123,7 +130,7 @@ const AllJobs = () => {
                                 <Stack spacing="2" direction={{base: 'column', md: 'row'}}>
                                     <FormControl id="position">
                                         <FormLabel>Position</FormLabel>
-                                        <Input name={'position'} type={'text'} value={search} onChange={handlePositionChange}/>
+                                        <Input name={'position'} type={'text'} value={localSearch} onChange={optimizedDebounce}/>
                                     </FormControl>
                                     <FormControl id={'sort'}>
                                         <FormLabel>Sort</FormLabel>

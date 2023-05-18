@@ -9,7 +9,7 @@ const Stats = () => {
   const {statsJob,stats,monthlyApplication} = initialState()
   useEffect(() => {
     statsJob()
-  },[monthlyApplication])
+  },[])
 
   return (
       <Box mt={'10'} textAlign={'center'}>

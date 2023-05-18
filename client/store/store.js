@@ -82,7 +82,7 @@ const initialState = create((set, get) => ({
     },
     registerUser: async (user1) => {
         try {
-            console.log('sss')
+
             const response = await axios.post('/api/v1/auth/register', user1)
             const {user, token, location} = response.data
             set({token: token, user: user, userLocation: location, jobLocation: location})

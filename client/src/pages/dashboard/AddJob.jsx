@@ -30,7 +30,8 @@ const AddJob = () => {
         isEditing,
         editJob,
         editJobId,
-        getAllJobs
+        getAllJobs,
+        testUser
     } = initialState()
     const storeState = initialState(state => state.set)
     const [jobPosition, setJobPosition] = useState(position)
@@ -38,9 +39,16 @@ const AddJob = () => {
     const [jobsLocation, setJobsLocation] = useState(jobLocation)
     const [jobsStatus, setJobsStatus] = useState(jobStatus)
     const [jobOptions, setJobOptions] = useState(jobType)
-    console.log(company, position, jobType, jobStatus)
+
     const handleSubmit = async (event) => {
         event.preventDefault()
+        if (testUser) {
+            return toast({
+                title : 'test user is readOnly',
+                duration : 3000,
+                status  : 'error'
+            })
+        }
         if (!jobCompany || !jobPosition || !jobsLocation) {
             return toast({
                 title: 'provide all values',
@@ -153,9 +161,9 @@ const AddJob = () => {
                             </Stack>
                             <Divider/>
                             <Flex direction="row-reverse" py="4" px={{base: '4', md: '6'}}>
-                                <Button onClick={handleReset} bg="red.500" ml={'2'}>Clear
+                                <Button onClick={handleReset} colorScheme="red" ml={'2'}>Clear
                                 </Button>
-                                <Button type={'submit'} onClick={handleSubmit} bg="green.500">Save
+                                <Button type={'submit'} onClick={handleSubmit} colorScheme="green">Save
                                 </Button>
                             </Flex>
                         </form>

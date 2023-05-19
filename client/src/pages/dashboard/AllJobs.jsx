@@ -18,11 +18,12 @@ import {
 import initialState from "../../../store/store.js";
 import {useEffect, useState,useMemo} from "react";
 import moment from 'moment'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Pagination from "./Pagination.jsx";
 
 const AllJobs = () => {
     const [localSearch,setLocalSearch] = useState('')
+    const navigate = useNavigate()
     const toast = useToast()
     let {
         jobTypeOptions,
@@ -43,19 +44,13 @@ const AllJobs = () => {
             searchType,
         clearFilter,
         searchJobStatusOptions,
-        searchJobTypeOptions
+        searchJobTypeOptions,
+        testUser
     } = initialState()
     useEffect( () => {
         getAllJobs(search,searchType,sort,searchStatus,noOfPages)
     },[page,getAllJobs,noOfPages,totalJobs,search,searchType,sort,searchStatus])
-    const handleSubmit = (event) => {
-        event.preventDefault()
-            return toast({
-                title: 'user updated',
-                duration: 3000,
-                status: 'success'
-            })
-    }
+
     const date = createdAt => {
         return moment(createdAt).format('MMM Do,YYYY')
     }
@@ -107,6 +102,27 @@ const AllJobs = () => {
     }
     const optimizedDebounce = useMemo(() => debounce(),[])
 
+    function editClickHandler(id) {
+        if (testUser) {
+            return toast({
+                title : 'test user is readOnly',
+                duration : 3000,
+                status  : 'error'
+            })
+        }
+        navigate('/add-job')
+        editHandler(id)
+    }
+    function deleteClickHandler(job) {
+        if (testUser) {
+            return toast({
+                title : 'test user is readOnly',
+                duration : 3000,
+                status  : 'error'
+            })
+        }
+        deleteHandler(job)
+    }
     return (
         <Box py={{base: '4', md: '8'}}>
             <Stack spacing="5" divider={<StackDivider/>}>
@@ -125,7 +141,7 @@ const AllJobs = () => {
                         boxShadow={useColorModeValue('sm', 'sm-dark')}
                         borderRadius="lg"
                     >
-                        <form onSubmit={handleSubmit}>
+                        <form>
                             <Stack spacing="2" px={{base: '4', md: '4'}} py={{base: '2', md: '3'}}>
                                 <Stack spacing="2" direction={{base: 'column', md: 'row'}}>
                                     <FormControl id="position">
@@ -157,7 +173,7 @@ const AllJobs = () => {
                                     </FormControl>
                                 </Stack>
                                 <Flex direction="row-reverse" py="2" px={{base: '4', md: '6'}}>
-                                    <Button onClick={clearFilter} bg="red.400">Clear filter
+                                    <Button onClick={clearFilter} colorScheme="red">Clear filter
                                     </Button>
                                 </Flex>
                             </Stack>
@@ -169,41 +185,42 @@ const AllJobs = () => {
             </Stack>
             <Text>{totalJobs} jobs found</Text>
             <Grid
-                templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+                templateColumns={{ base: "1fr", md: "1fr 1fr" }}
                 gap={6}
                 mt={'4'}
             >
-                {jobs?.map(job =>  <Box borderWidth="1px" borderRadius="lg" overflow="hidden" maxW="md">
+                {jobs?.map((job,index) =>  <Box borderWidth="1px" key={index} borderRadius="lg" overflow="hidden" maxW="md">
                     <Flex direction={{ base: "column", md: "row" }}>
                         <Box flex="1" p="4">
                             <Text fontSize="2xl" fontWeight="semibold">
                                 {job.position}
                             </Text>
-                            <Text fontSize="lg" mt="2">
+                            <Text fontSize="lg" m={'1'}>
                                 {job.company}
                             </Text>
                             <Flex mt="2" flexWrap="wrap">
-                                <Badge variant="solid" colorScheme="green" mr="2">
+                                <Badge variant="solid" colorScheme="green" m="1">
                                     {date(job.createdAt)}
                                 </Badge>
-                                <Badge variant="solid" colorScheme="purple" mr="2">
+                                <Badge variant="solid" colorScheme="purple" m={'1'}>
                                     {job.jobType}
                                 </Badge>
-                                <Badge variant="solid" bg={statusColors[job.status]} mr="2">
+                                <Badge variant="solid" bg={statusColors[job.status]} m={'1'}>
                                     {job.status}
+                                </Badge>
+                                <Badge variant="solid" colorScheme={'cyan'} m={'1'}>
+                                    {job.jobLocation}
                                 </Badge>
                             </Flex>
                         </Box>
-                        <Stack>
-                            <Link to={'/add-job'}>
-                                <Button variant="solid" colorScheme="purple" mr="2" onClick={() => editHandler(job._id)}>
-                                    Edit
-                                </Button>
-                            </Link>
-                            <Button variant="solid" colorScheme="blue" mr="2" onClick={() => deleteHandler(job._id)}>
-                                Delete
-                            </Button>
-                        </Stack>
+                    </Flex>
+                    <Flex justifyContent={'center'} mb={'2'}>
+                        <Button variant="solid" colorScheme='blue' mr="2" onClick={() => editClickHandler(job._id)}>
+                            Edit
+                        </Button>
+                        <Button variant="solid" colorScheme="red" mr="2" onClick={() => deleteClickHandler(job._id)}>
+                            Delete
+                        </Button>
                     </Flex>
 
                 </Box>)}

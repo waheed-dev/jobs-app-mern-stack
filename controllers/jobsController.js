@@ -22,6 +22,7 @@ const deleteJob = async (req, res) => {
     res.status(401).json('unauthorized')
 };
 const getAllJobs = async (req, res) => {
+    console.log(req.user)
     const {status,jobType,search,sort} = req.query
     const queryObject = {
         createdBy: req.user.userId,

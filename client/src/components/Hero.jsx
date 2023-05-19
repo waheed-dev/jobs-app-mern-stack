@@ -8,28 +8,23 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
+import Register from "../pages/Register.jsx";
+
 
 const Hero = () => {
   return (
-    <Flex mt={"6rem"} mx={"auto"} justifyContent={"center"} px={6}>
-      <div>
-        <Heading fontSize={"6xl"}>Job Tracking App</Heading>
-        <Text my={6} fontSize={"lg"}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-          deleniti illum laborum modi nobis numquam recusandae repellat
-          reprehenderit tempore veritatis.
+      <Box textAlign="center" padding="40px">
+        <Heading as="h1" size="2xl" mb="4">
+            Welcome to Jobify
+        </Heading>
+        <Text fontSize="xl" mb="8">
+            Track your job applications and manage your progress with ease
         </Text>
+        <Flex justify="center" gap="4">
+          <Register/>
+        </Flex>
 
-        <Button
-          p={4}
-          bg="teal.300"
-          _dark={{ bg: "teal.500" }}
-          variant={"outlined"}
-        >
-          Login / Sign up
-        </Button>
-      </div>
-    </Flex>
+      </Box>
   );
 };
 export default Hero;

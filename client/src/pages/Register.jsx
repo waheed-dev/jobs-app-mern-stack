@@ -6,7 +6,7 @@ import {
   Button,
   VStack,
   useToast,
-  Text,
+  Text, HStack, Box,
 } from "@chakra-ui/react";
 import initialState from "../../store/store.js";
 import {useEffect} from "react";
@@ -40,9 +40,6 @@ const Register = () => {
       })
     }
   },[showAlert,user,navigate])
-  useEffect(() => {
-
-  },[user,navigate])
   const handleLogin = async  (e) => {
     e.preventDefault();
     if (!email | !password || (!alreadyRegistered && !name)) {
@@ -60,14 +57,17 @@ const Register = () => {
        await registerUser(currentUser)
     }
   };
-
+  const handleTestUser = async () => {
+    const currentUser = {password : 'secret',email : 'test@test.com'}
+      await loginUser(currentUser)
+  }
   function alreadyRegisteredHandler(e) {
     e.preventDefault();
     setAlreadyRegistered(!alreadyRegistered);
   }
 
   return (
-    <VStack spacing={4}>
+    <VStack spacing={4} w={'xl'}>
       {!alreadyRegistered && (
         <FormControl id="name">
           <FormLabel>Name</FormLabel>
@@ -119,15 +119,19 @@ const Register = () => {
           </a>
         </Text>
       )}
-      {!alreadyRegistered ? (
-        <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
-          Register
-        </Button>
-      ) : (
-        <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
-          Login
-        </Button>
-      )}
+      <HStack>
+        {!alreadyRegistered ? (
+            <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
+              Register
+            </Button>
+        ) : (
+            <Button colorScheme="blue" onClick={handleLogin} isDisabled={isLoading}>
+              Login
+            </Button>
+        )}
+        <Button colorScheme={'green'} onClick={handleTestUser}>Test app</Button>
+
+      </HStack>
     </VStack>
   );
 };

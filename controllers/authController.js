@@ -18,10 +18,11 @@ const register = async (req, res, next) => {
     }
 };
 const login = async (req, res,next) => {
+    console.log(req.body)
     try {
     const {email,password} = req.body;
         if (!email || !password) {
-            throw new Error('please email and password')
+            throw new Error('please provide email and password')
         }
         const user = await User.findOne({email }).select('+password')
         if (!user) {

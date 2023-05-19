@@ -6,17 +6,20 @@ const addUserToLocalStorage = ({user, token, location}) => {
     localStorage.setItem('token', token)
     localStorage.setItem('location', location)
 }
-
 const user = localStorage.getItem('user')
 const token = localStorage.getItem('token')
 const userLocation = localStorage.getItem('location')
+const userString = JSON.parse(user)
+const isTestUser = userString?.email === 'test@test.com'
 const authFetch = axios.create({
     baseURL: 'api/v1',
 })
 const initialState = create((set, get) => ({
     isLoading: false,
     showAlert: null,
+    testUser : isTestUser,
     alertText: '',
+    alertStatus : "",
     user: user ? JSON.parse(user) : null,
     token: token || null,
     set: (newState) => set(() => ({...initialState, ...newState})),
@@ -70,14 +73,14 @@ const initialState = create((set, get) => ({
         }
     },
     updateUser: async (currentUser) => {
-        try {
-            const {data} = await authFetch.patch('/auth/updateUser', currentUser)
-            const {user, token, location} = data
-            set({token: token, user: user, userLocation: location, jobLocation: location})
-            set({showAlert: true, alertText: 'user created! redirecting ....'})
-            addUserToLocalStorage({user, token, location})
-        } catch (error) {
-            set({showAlert: false, alertText: 'something went wrong'})
+            try {
+                const {data} = await authFetch.patch('/auth/updateUser', currentUser)
+                const {user, token, location} = data
+                set({token: token, user: user, userLocation: location, jobLocation: location})
+                set({showAlert: true, alertStatus : 'success',alertText: 'profile updated'})
+                addUserToLocalStorage({user, token, location})
+            } catch (error) {
+                set({showAlert: false,alertStatus : 'error', alertText: 'something went wrong'})
         }
     },
     registerUser: async (user1) => {
@@ -95,6 +98,7 @@ const initialState = create((set, get) => ({
         }
     },
     loginUser: async (currentUser) => {
+        console.log(currentUser)
         try {
             const response = await axios.post('/api/v1/auth/login', currentUser)
             const {user, token, location} = response.data
@@ -102,6 +106,9 @@ const initialState = create((set, get) => ({
             set({token: token, user: user, userLocation: location, jobLocation: location})
             set({showAlert: true, alertText: 'logged in successfully! redirecting ....'})
             addUserToLocalStorage({user, token, location})
+            if ( response.data.user.email === 'test@test.com') {
+                set({testUser : true})
+            }
         } catch (error) {
             set({showAlert: false, alertText: 'credentials dont match'})
         } finally {

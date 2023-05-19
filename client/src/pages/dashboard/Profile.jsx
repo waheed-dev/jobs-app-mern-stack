@@ -17,33 +17,42 @@ import {useState} from "react";
 
 const Profile = () => {
     const toast = useToast()
-    const {isLoading, registerUser, token, user, showAlert, loginUser, alertText,updateUser} = initialState()
+    const {isLoading, registerUser, token,alertStatus, user, showAlert, loginUser, alertText,updateUser,testUser} = initialState()
     const [name, setName] = useState(user?.name)
     const [email, setEmail] = useState(user?.email)
     const [lastName, setLastName] = useState(user?.lastName)
     const [location, setLocation] = useState(user?.location)
-
-    const handleSubmit = (event) => {
+    console.log(testUser)
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        if (!name || !email || !lastName || !location) {
+        if (testUser) {
+            return toast({
+                title : 'test user is readOnly',
+                duration : 3000,
+                status  : 'error'
+            })
+        }
+
+        if (!name || !email || !location) {
             return toast({
                 title : 'provide all values',
                 duration : 3000,
                 status : 'error'
             })
         } else {
-            updateUser({name,email,lastName,location})
-            return toast({
-                title : 'user updated',
-                duration : 3000,
-                status : 'success'
-            })
+             updateUser({name,email,lastName,location}).then(() => {
+                 return toast({
+                     title : `user updated`,
+                     duration : 3000,
+                     status : `success`,
+                 })
+             })
         }
 
     }
 
     return (
-        <Container py={{base: '8', md: '14'}}>
+        <Box py={{base: '8', md: '14'}} bg={''}>
             <Stack spacing="5" divider={<StackDivider/>}>
                 <Stack
                     direction={{base: 'column', lg: 'column'}}
@@ -56,7 +65,6 @@ const Profile = () => {
                         </Text>
                     </Box>
                     <Box
-                        as="form"
                         bg="bg-surface"
                         boxShadow={useColorModeValue('sm', 'sm-dark')}
                         borderRadius="lg"
@@ -87,14 +95,14 @@ const Profile = () => {
                             </Stack>
                             <Divider/>
                             <Flex direction="row-reverse" py="4" px={{base: '4', md: '6'}}>
-                                <Button type={'submit'} onClick={handleSubmit} bg="green.500">Save
+                                <Button type={'submit'} onClick={handleSubmit} colorScheme="green">Save
                                 </Button>
                             </Flex>
                         </form>
                     </Box>
                 </Stack>
             </Stack>
-        </Container>
+        </Box>
     )
 }
 export default Profile

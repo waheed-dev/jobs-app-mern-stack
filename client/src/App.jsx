@@ -18,7 +18,6 @@ function App() {
             <Route path={'Profile'} element={<Profile/>} />
           </Route>
           <Route path={"/landing"} element={<Landing/>} />
-          <Route path={"/register"} element={<Register/>} />
           <Route path={"*"} element={<Error/>} />
         </Routes>
       </Box>

@@ -32,7 +32,7 @@ export const UserProfile = (props) => {
                 </Box>
             </HStack>
             <Box display={'flex'} justifyContent={'center'}>
-                <Button onClick={logOutHandler} variant={'solid'} mt={'3'} px={'12'} bg={'red.500'}>Logout</Button>
+                <Button onClick={logOutHandler} variant={'solid'} mt={'3'} px={'12'} colorScheme={'red'}>Logout</Button>
             </Box>
 
         </Box>

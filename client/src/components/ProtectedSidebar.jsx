@@ -24,9 +24,9 @@ const Sidebar = () => {
     const isMobile = useBreakpointValue({ base: true, lg: false });
     const { colorMode, toggleColorMode } = useColorMode();
     return (
-        <>
+        <Box position={'sticky'} top={2}>
             <Box maxW="2xl" mx="auto" px={{ base: '', sm: '8' }}>
-                <Box mt={'4'} display="flex" alignItems="center" borderRight={'1px'} borderColor={colorMode === 'light' ? 'gray.200' : 'gray.700' }>
+                <Box mt={'4'} display="flex" alignItems="center">
                     {isMobile ? (
                         <Button
                             onClick={onOpen}
@@ -41,7 +41,6 @@ const Sidebar = () => {
                         <Flex
                             flex="1"
                             bg="bg-surface"
-                            boxShadow={useColorModeValue('sm', 'sm-dark')}
                             maxW={{ base: 'full', sm: 'xs' }}
                             py={{ base: '6', sm: '8' }}
                             px={{ base: '4', sm: '6' }}
@@ -94,15 +93,22 @@ const Sidebar = () => {
                                 <Stack justify="space-between" spacing="1">
                                     <Stack spacing={{ base: '5', sm: '6' }} shouldWrapChildren>
                                         <Heading>JOBIFY</Heading>
-                                        <Stack spacing="1">
+                                        <Stack spacing="4">
                                             <Button onClick={toggleColorMode}>
                                                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
                                             </Button>
-                                            <NavButton label="Home" icon={FiHome} />
-                                            <NavButton label="Dashboard" icon={FiBarChart2} aria-current="page" />
-                                            <NavButton label="Tasks" icon={FiCheckSquare} />
-                                            <NavButton label="Bookmarks" icon={FiBookmark} />
-                                            <NavButton label="Users" icon={FiUsers} />
+                                            <Link to={'/'}>
+                                                <NavButton label="Home" icon={FiHome} />
+                                            </Link>
+                                            <Link to={'all-jobs'}>
+                                                <NavButton label="All jobs" icon={FiBarChart2} aria-current="page" />
+                                            </Link>
+                                            <Link to={'add-job'}>
+                                                <NavButton label="Add job" icon={FiCheckSquare} />
+                                            </Link>
+                                            <Link to={'profile'}>
+                                                <NavButton label="Profile" icon={FiBookmark} />
+                                            </Link>
                                         </Stack>
                                         <Divider />
                                         <UserProfile
@@ -116,7 +122,7 @@ const Sidebar = () => {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-        </>
+        </Box>
     );
 };
 

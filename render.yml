@@ -1,0 +1,3 @@
+services:
+  - name: jobs-app
+    buildCommand: npm run setup-production

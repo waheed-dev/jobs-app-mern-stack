@@ -18,7 +18,7 @@ const Hero = () => {
             Welcome to Jobify
         </Heading>
         <Text fontSize="xl" mb="8">
-            Track your job applications and manage your progress with ease
+            Track your job applications and manage your progress with ease.
         </Text>
         <Flex justify="center" gap="4">
           <Register/>

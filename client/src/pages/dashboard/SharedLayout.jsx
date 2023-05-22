@@ -4,7 +4,7 @@ import {Box, Grid, GridItem} from "@chakra-ui/react";
 const SharedLayout = () => {
     return (
         <Grid
-            templateColumns='repeat(6, 1fr)'
+            templateColumns={{md : 'repeat(6, 1fr)'}}
             gap={''}
         >
             <GridItem>
